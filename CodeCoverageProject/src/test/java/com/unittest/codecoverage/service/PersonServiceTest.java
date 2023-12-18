@@ -97,4 +97,32 @@ public class PersonServiceTest {
 			.hasMessage(expectedMessage);
 	}
 
+	@Test
+	public void testUpdate_shouldUpdatePersonWithSuccessWhenAllPersonsInfoIsFilled() {
+		Person person = new Person();
+		person.setName("Name");
+		person.setAge(21);
+		person.setGender(Gender.F);
+
+		when(repository.insert(any(Person.class))).thenReturn(person);
+		service.insert(person);
+
+		person.setName("Name2");
+		service.update(person);
+		// assert Equal
+	}
+
+	@Test
+	public void testUpdate_shouldThrowPersonExceptionWhenPersonIsNull() {
+
+		List<String> expectedErrors = Lists.newArrayList("Name is required", "Gender is required");
+		String expectedMessage = String.join(";", expectedErrors);
+		Person person = null;
+
+		assertThatThrownBy(() -> service.update(person))
+				.isInstanceOf(PersonException.class)
+				.hasFieldOrPropertyWithValue("errors", expectedErrors)
+				.hasMessage(expectedMessage);
+	}
+
 }
