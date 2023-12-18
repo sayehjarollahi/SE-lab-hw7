@@ -9,34 +9,32 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PersonRepositoryTest {
 
-        private PersonRepository repository;
+    private PersonRepository repository;
 
-        @BeforeEach
-        public void setUp() {
-            repository = new PersonRepository();
-        }
+    @BeforeEach
+    public void setUp() {
+        repository = new PersonRepository();
+    }
 
-        @Test
-        public void testInsert_shouldInsertPersonSuccessfully() {
-            Person person = new Person();
-            person.setName("Name");
-            person.setAge(21);
-            Person result = repository.insert(person);
+    @Test
+    public void testInsert_shouldInsertPersonSuccessfully() {
+        Person person = new Person();
+        person.setName("Name");
+        person.setAge(21);
+        Person result = repository.insert(person);
 
-            assertEquals(person, result);
-        }
+        assertEquals(person, result);
+    }
 
-        @Test
-        public void testInsert_shouldThrowNullPointerExceptionWhenPersonIsNull() {
+    @Test
+    public void testInsert_shouldThrowNullPointerExceptionWhenPersonIsNull() {
         assertThrows(NullPointerException.class, () -> repository.insert(null));
     }
 
     @Test
     public void testGet_shouldGetPersonSuccessfully() {
         String name = "Name";
-
         Person result = repository.get(name);
-
         assertNull(result);
     }
 
@@ -69,5 +67,4 @@ public class PersonRepositoryTest {
         String name = "Name";
         assertDoesNotThrow(() -> repository.delete(name));
     }
-
 }
