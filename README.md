@@ -109,7 +109,55 @@ codecoverage دقیق تر به شرح زیر است:
 				.doesNotThrowAnyException();
 	}
 ```
+تست کاورج برای models کم است. ابتدا آن را اضافه میکنیم.
+```java
+public class TrafficTest {
 
+    private Traffic traffic;
+
+    @BeforeEach
+    public void setUp() {
+        traffic = new Traffic();
+    }
+
+    @Test
+    public void testCurrentTrafficLight() {
+        TrafficLigth expected = TrafficLigth.RED;
+        traffic.setCurrentTrafficLight(expected);
+        assertEquals(expected, traffic.getCurrentTrafficLight());
+    }
+
+    @Test
+    public void testIntenseCarTraffic() {
+        boolean expected = true;
+        traffic.setIntenseCarTraffic(expected);
+        assertEquals(expected, traffic.intenseCarTraffic());
+    }
+
+    @Test
+    public void testMinSpeedAllowed() {
+        short expected = 10;
+        traffic.setMinSpeedAllowed(expected);
+        assertEquals(expected, traffic.getMinSpeedAllowed());
+    }
+
+    @Test
+    public void testMaxSpeedAllowed() {
+        short expected = 20;
+        traffic.setMaxSpeedAllowed(expected);
+        assertEquals(expected, traffic.getMaxSpeedAllowed());
+    }
+
+    @Test
+    public void testStreetDirectionFlow() {
+        StreetDirectionFlow expected = StreetDirectionFlow.ONE_WAY;
+        traffic.setStreetDirectionFlow(expected);
+        assertEquals(expected, traffic.getStreetDirectionFlow());
+        traffic.setStreetDirectionFlow(StreetDirectionFlow.TWO_WAY);
+        assertEquals(StreetDirectionFlow.TWO_WAY,  traffic.getStreetDirectionFlow());
+    }
+}
+```
 تست کاورج repositories صفر است. یک کلاس PersonRepositoryTest می سازیم.
 
 ```java
@@ -178,3 +226,47 @@ public class PersonRepositoryTest {
 
 }
 ```
+
+پس از انجام این تست ها به کاورج زیر می رسیم:
+![4](imgs/cov4.png)
+
+حال باز هم برای تکمیل مدل سراغ person می رویم:
+
+```java
+public class PersonTest {
+    
+    @Test
+    public void testAge() {
+        Person person = new Person();
+        person.setAge(21);
+        int age = person.getAge();
+        assertEquals(age, 21);
+    }
+}
+```
+
+همانطور که مشاهده میشود در models موارد زیر مانده اند:
+
+![5](imgs/covp.png)
+
+بنابراین به سراغ FootpassengerTest می رویم.
+
+```java
+public class FootpassengerTest {
+    @Test
+    public void testAge() {
+        Footpassenger footpassenger = new Footpassenger();
+        footpassenger.setCrossedTheCrosswalk(true);
+        assertTrue(footpassenger.crossedTheCrosswalk());
+    }
+}
+```
+حال مشاهده میشود exceptions, repositories, models و services همگی به 100 میرسند.
+
+![img](imgs/img.png)
+![img](imgs/img_1.png)
+
+همچنین با استفاده از گزینه generate code coverage report در فولدر reports میتوانید ریپورت پروژه را مشاهده کنید:
+![img](imgs/img_2.png)
+
+![img](imgs/img_3.png)
