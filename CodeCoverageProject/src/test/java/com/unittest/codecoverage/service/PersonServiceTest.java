@@ -1,8 +1,9 @@
 package com.unittest.codecoverage.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -109,7 +110,7 @@ public class PersonServiceTest {
 
 		person.setName("Name2");
 		service.update(person);
-		// assert Equal
+		assertEquals(person.getName(), "Name2");
 	}
 
 	@Test
@@ -123,6 +124,49 @@ public class PersonServiceTest {
 				.isInstanceOf(PersonException.class)
 				.hasFieldOrPropertyWithValue("errors", expectedErrors)
 				.hasMessage(expectedMessage);
+	}
+
+	@Test
+	public void testGet_shouldReturnPersonWhenNameIsProvided() {
+		String name = "Name";
+		Person person = new Person();
+		person.setName(name);
+		person.setAge(21);
+		person.setGender(Gender.F);
+
+		when(repository.get(any(String.class))).thenReturn(person);
+
+		Person person2 = service.get(name);
+
+		assertEquals(person, person2);
+	}
+
+	@Test
+	public void testGet_shouldThrowPersonExceptionWhenNameIsNull() {
+		String name = null;
+
+		assertThatThrownBy(() -> service.get(name))
+				.isInstanceOf(PersonException.class)
+				.hasMessage("Name is required");
+	}
+
+	@Test
+	public void testDelete_shouldDeletePersonWhenNameIsProvided() {
+		String name = "Name";
+
+		doNothing().when(repository).delete(any(String.class));
+
+		service.delete(name);
+		verify(repository, times(1)).delete(name);
+	}
+
+	@Test
+	public void testDelete_shouldThrowPersonExceptionWhenNameIsNull() {
+		String name = null;
+
+		assertThatThrownBy(() -> service.delete(name))
+				.isInstanceOf(PersonException.class)
+				.hasMessage("Name is required");
 	}
 
 }

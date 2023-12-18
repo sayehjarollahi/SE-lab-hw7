@@ -50,4 +50,21 @@ public class TrafficBehaviorServiceTest {
 		
 	}
 
+	@Test
+	@DisplayName("Should not throw exception when footpassenger crosses the road safely")
+	public void testFootpassengerCrossTheStreet_shouldNotThrowBehaviorExceptionWhenFootpassengerCrossesTheRoadSafely() {
+
+		Traffic currentTrafic = new Traffic();
+		currentTrafic.setIntenseCarTraffic(false);
+
+		Footpassenger currentFootpassengerBehavior = new Footpassenger();
+		currentFootpassengerBehavior.setCrossedTheRoad(true);
+		currentFootpassengerBehavior.setCrossedTrafficLigth(TrafficLigth.GREEN);
+		currentFootpassengerBehavior.setLookedToTheLeft(true);
+		currentFootpassengerBehavior.setLookedToTheRight(true);
+
+		Assertions.assertThatCode(() -> trafficBehaviorService.footpassengerCrossTheStreet(currentTrafic, currentFootpassengerBehavior))
+				.doesNotThrowAnyException();
+	}
+
 }
